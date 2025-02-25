@@ -6,8 +6,10 @@ using School.Application.Services;
 using School.Application.Services.Impl;
 using School.Application.Validations;
 using School.Domain.Repository;
+using School.Domain.Shared;
 using School.Infrastructure.DataAcces;
 using School.Infrastructure.Repository;
+using School.Infrastructure.Shared;
 using School.Infrastructure.Validations;
 using System.Text;
 
@@ -23,23 +25,29 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SchoolDbContext>(options => options.UseSqlServer("Server=DESKTOP-2IJ9EH5;Database=SchoolDb;Trusted_Connection=True;TrustServerCertificate=True;"));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IStudentServices, StudentServices>();
+builder.Services.AddScoped<ILoginservice, Loginservice>();
 builder.Services.AddScoped<IStudentValidations, StudentValidations>();
+builder.Services.AddScoped<IToken, Token>();
 
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
+
+var secretKey = "TuClaveSecretaMuySeguraYConMasDe32Caracteres1234";
+var key = Encoding.UTF8.GetBytes(secretKey);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	.AddJwtBearer(options =>
 	{
+		options.RequireHttpsMetadata = false;
+		options.SaveToken = true;
 		options.TokenValidationParameters = new TokenValidationParameters
 		{
-			ValidateIssuer = true,
-			ValidIssuer = jwtSettings["Issuer"],
-			ValidateAudience = true,
-			ValidAudience = jwtSettings["Audience"],
-			ValidateLifetime = true,
 			ValidateIssuerSigningKey = true,
-			IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+			IssuerSigningKey = new SymmetricSecurityKey(key),
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidIssuer = "TuIssuer",
+			ValidAudience = "TuAudience",
+			ValidateLifetime = true,
+			ClockSkew = TimeSpan.Zero
 		};
 	});
 

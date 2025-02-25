@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using School.Api.Extensions;
 using School.Application.Dtos;
 using School.Application.Services;
@@ -14,6 +15,7 @@ public class StudentController(IStudentServices studentService) : ControllerBase
 
 	[HttpGet]
 	[Route("GetAll")]
+	[Authorize]
 	public async Task<Response<List<Student>>> GetAllStudents([FromQuery] int page, [FromQuery] int size)
 	{
 		Response<List<Student>> response = await this.Execute(async () =>
