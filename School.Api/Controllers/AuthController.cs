@@ -19,7 +19,7 @@ namespace School.Api.Controllers
 		{
 			return this.Execute(async () =>
 			{
-				return await _loginService.LoginAsync(login.Email, login.Password);
+				return await _loginService.LoginAsync(login.UserName, login.Password);
 			});
 		}
 	}

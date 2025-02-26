@@ -22,24 +22,24 @@ public class StudentController(IStudentServices studentService) : ControllerBase
 		{
 			return await _studentService.GetAllStudents(page, size);
 		});
-		response.Message = response.Success == true ? "" : response.Message;
 		return response;
 	}
 
 	[HttpGet]
 	[Route("GetByFilter")]
+	[Authorize]
 	public async Task<Response<List<Student>>> GetByfilterStudents([FromQuery] Guid? id, [FromQuery] string? DNI, [FromQuery] string? name, [FromQuery] string? email)
 	{
 		Response<List<Student>> response = await this.Execute(async () =>
 		{
 			return await _studentService.GetByFilter(id, DNI, name, email);
 		});
-		response.Message = response.Success == true ? "" : response.Message;
 		return response;
 	}
 
 	[HttpPost]
 	[Route("Create")]
+	[Authorize]
 	public async Task<Response<Student>> CreateStudent(CreateStudentDto createStudentDto)
 	{
 		Response<Student> response = await this.Execute(async () =>
@@ -52,6 +52,7 @@ public class StudentController(IStudentServices studentService) : ControllerBase
 
 	[HttpPut]
 	[Route("Edit")]
+	[Authorize]
 	public async Task<Response<Student>> EditStudent(EditStudentDto editStudentDto)
 	{
 		Response<Student> response = await this.Execute(async () =>
@@ -64,6 +65,7 @@ public class StudentController(IStudentServices studentService) : ControllerBase
 
 	[HttpDelete]
 	[Route("Delete")]
+	[Authorize]
 	public async Task<Response<Student>> DeleteStudent(Guid id)
 	{
 		Response<Student> response = await this.Execute(async () =>

@@ -14,6 +14,7 @@ public class SchoolDbContext : DbContext
 	public DbSet<Course>? Courses { get; set; }
 	public DbSet<Enrollment>? Enrollments { get; set; }
 	public DbSet<Grade>? Grades { get; set; }
+	public DbSet<User>? Users { get; set; }
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
@@ -21,7 +22,9 @@ public class SchoolDbContext : DbContext
 		modelBuilder.Entity<Grade>()
 			.Property(g => g.Score)
 			.HasPrecision(5, 2);
-
+		modelBuilder.Entity<User>().HasData(
+			new User { Id = Guid.Parse("d513d9ee-b210-4fe0-b5b7-95994e026b79"), UserName = "admin", Password = "admin1234",Rol = UserRole.Admin, CreatedDate = new DateTime(2025, 2, 20) }
+			);
 	
 		modelBuilder.Entity<Student>().HasData(
 			new Student {Id = Guid.Parse("703d5c54-af34-4e85-8f6f-41c876beed01"), DNI = "100000001", Name = "Juan", LastName = "Pérez", Email = "juan.perez1@school.com", Phone = "3000000001", Semester = 1, State = StudentState.Active, CreatedDate = new DateTime(2024, 2, 20) },
